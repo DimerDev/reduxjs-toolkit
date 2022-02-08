@@ -54,7 +54,7 @@ const todoSlice = createSlice ({ // create store
         },
         [fetchTodo.rejected]: (state, action) => { // Error
             state.error = action.payload;
-           // state.loading = !state.loading;
+            state.loading = !state.loading;
         },
     },          
 });

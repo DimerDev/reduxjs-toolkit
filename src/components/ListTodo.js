@@ -14,9 +14,9 @@ const ListTodo = () => {
     return (
         
 
-        <div className='container d-flex justify-content-center m-5'>
-            {loading === true && <Spinner />}  
-            {error === true && <h2>Something went wrong: {error} </h2>}
+        <div className='container'>
+            {loading  && <Spinner />}  
+            {error && <h2>Something went wrong: {error} </h2>}
             <ul className='list-group'>
                 <SingleTodo />
             </ul>
