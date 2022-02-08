@@ -5,7 +5,7 @@ import Spinner from './Spinner';
 
 const ListTodo = () => {
 
-    const todos = useSelector(state=> state.todos.list);
+    
     const {loading, error} = useSelector(state => state.todos);
     //console.log(loading);
     //console.log(error);
@@ -14,12 +14,12 @@ const ListTodo = () => {
     return (
         
 
-        <div className='container d-flex justify-content-center'>
-        {loading === true && <Spinner />}  
-        {error === true && <h2>Something went wrong: {error} </h2>}
-          <ul className='list-group'>
-              
-          </ul>
+        <div className='container d-flex justify-content-center m-5'>
+            {loading === true && <Spinner />}  
+            {error === true && <h2>Something went wrong: {error} </h2>}
+            <ul className='list-group'>
+                <SingleTodo />
+            </ul>
         </div>
     );
 };

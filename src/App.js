@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchTodo } from './store/todoSlice';
 import ListTodo from './components/ListTodo';
 

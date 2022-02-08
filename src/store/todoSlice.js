@@ -4,7 +4,7 @@ export const fetchTodo = createAsyncThunk(   // получаем данные с
     'todos/fetchTodo',           //create action (name store/method)
     async function( _, {rejectWithValue}) {          // 1param -  принимает при вызове метода; 2param - rejectWithValue - метод возвращаем в catch
         try {
-            const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=20');
+            const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=10');
             if(!response.ok) {
                 throw new Error('Server error');
             }
