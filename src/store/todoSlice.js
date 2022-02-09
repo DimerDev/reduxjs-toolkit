@@ -19,31 +19,49 @@ export const fetchTodo = createAsyncThunk(   // получаем данные с
 
 export const fetchAddTodo = createAsyncThunk (
     'todos/fetchAddTodo',
-    async function(text, {rejectWithValue, dispatch}) {
+    async (text, {rejectWithValue, dispatch}) => {
         try {
             const response = await fetch ('https://jsonplaceholder.typicode.com/todos',{
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify({
-                completed: false,
-                id: 1,
-                title: text,
-                userId: 1
-            })
-        });
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify({
+                    completed: false,
+                    id: 1,
+                    title: text,
+                    userId: 1
+                })
+            });
 
-        if(!response.ok) {
-            throw new Error('Server error');
-        }
-        const data = await response.json();
-        dispatch(add(data));
+            if(!response.ok) {
+                throw new Error('Server error: can\'t add new todo');
+            }
+            const data = await response.json();
+            dispatch(add(data));
 
         } catch (error) {
             return rejectWithValue(error.message);
         }
-        
+    }
+);
+
+export const fetchDeleteTodo = createAsyncThunk(  // fake method
+    'todos/fetchDeleteTodo',
+    async (id, {rejectWithValue, dispatch}) => {
+        try {
+            const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`,{
+                method: 'DELETE'
+            })
+
+            if(!response.ok) {
+                throw new Error('Server error: can\'t detete task');
+            }
+            const data = await response.json();
+            dispatch(remove({id}));
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
     }
 );
 
@@ -64,7 +82,7 @@ const todoSlice = createSlice ({ // create store
 
         },
         remove(state, action) {   //   action.payload = принимаем данные
-
+            state.list = state.list.filter(todo =>todo.id !== action.payload.id);
         },
         //   action:{
         //      payload: принимаем данные переданные при вызове метода,

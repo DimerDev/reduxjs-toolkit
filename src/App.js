@@ -16,7 +16,8 @@ function App() {
 	const handlerSubmit = (event) => {
 		event.preventDefault();
 		const text = event.target.text.value.trim();
-		dispatch(fetchAddTodo(text)); 
+		if(text.length) dispatch(fetchAddTodo(text)); 
+		
 	};
 	
 	return (
