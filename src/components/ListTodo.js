@@ -7,8 +7,6 @@ const ListTodo = () => {
 
     
     const {loading, error} = useSelector(state => state.todos);
-    //console.log(loading);
-    //console.log(error);
 
     return (
         

@@ -57,13 +57,47 @@ export const fetchDeleteTodo = createAsyncThunk(  // fake method
             if(!response.ok) {
                 throw new Error('Server error: can\'t detete task');
             }
-            const data = await response.json();
+            //const data = await response.json();
             dispatch(remove({id}));
         } catch (error) {
             return rejectWithValue(error.message);
         }
     }
 );
+
+export const fetchToggleCompleteTodo = createAsyncThunk(
+    'todos/fetchToggleCompleteTodo',
+    async (id, {rejectWithValue, dispatch, getState}) => {
+        const todo = getState().todos.list.find(todo => todo.id === id);
+
+        try {
+            const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`,{
+                method: 'PATCH',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify({
+                    completed: !todo.completed,
+                })
+            })
+            
+            if(!response.ok) {
+                throw new Error('Server error: can\'t toggle completed in task');
+            }
+
+            const data = await response.json();
+            dispatch(toggleComplete(id));
+
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+const setError = (state, action) => { // Error for all fetch methods
+    state.error = action.payload;
+    state.loading = !state.loading;
+}
 
 const todoSlice = createSlice ({ // create store
     name: 'todos',                // name store   
@@ -78,8 +112,9 @@ const todoSlice = createSlice ({ // create store
         add(state, action) {   
             state.list.push(action.payload);
         },
-        toggleComplete(state, action) {   
-
+        toggleComplete(state, action) { 
+            const toggledTodo = state.list.find(todo => todo.id === action.payload);
+            toggledTodo.completed = !toggledTodo.completed;
         },
         remove(state, action) {   //   action.payload = принимаем данные
             state.list = state.list.filter(todo =>todo.id !== action.payload.id);
@@ -100,10 +135,11 @@ const todoSlice = createSlice ({ // create store
             state.loading = !state.loading;
             state.list = action.payload;            // запись в state полученных данных с API 
         },
-        [fetchTodo.rejected]: (state, action) => { // Error
-            state.error = action.payload;
-            state.loading = !state.loading;
-        },
+        [fetchTodo.rejected]: setError,
+        [fetchAddTodo.rejected]: setError,
+        [fetchDeleteTodo.rejected]: setError,
+        [fetchToggleCompleteTodo.rejected]: setError,
+
     },          
 });
 

@@ -1,18 +1,17 @@
 import { useSelector, useDispatch } from "react-redux";
-import { fetchDeleteTodo } from "../store/todoSlice";
+import { fetchDeleteTodo, fetchToggleCompleteTodo } from "../store/todoSlice";
 
 const SingleTodo = () => {
 
     const dispatch = useDispatch();
     const todos = useSelector(state => state.todos.list);
-    //console.log(todos);
 
     const handlerChange = (id) => {
-        console.log(id);
+        dispatch(fetchToggleCompleteTodo(id));
     };
+
     const handlerDel = (id) => {
         dispatch(fetchDeleteTodo(id));
-
     };
 
     return(
