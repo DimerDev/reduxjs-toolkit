@@ -1,7 +1,7 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchTodo } from './store/todoSlice';
+import { fetchTodo, fetchAddTodo } from './store/todoSlice';
 import ListTodo from './components/ListTodo';
 
 
@@ -16,7 +16,7 @@ function App() {
 	const handlerSubmit = (event) => {
 		event.preventDefault();
 		const text = event.target.text.value.trim();
-		
+		dispatch(fetchAddTodo(text)); 
 	};
 	
 	return (

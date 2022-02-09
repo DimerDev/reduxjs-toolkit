@@ -17,6 +17,36 @@ export const fetchTodo = createAsyncThunk(   // получаем данные с
     },
 );
 
+export const fetchAddTodo = createAsyncThunk (
+    'todos/fetchAddTodo',
+    async function(text, {rejectWithValue, dispatch}) {
+        try {
+            const response = await fetch ('https://jsonplaceholder.typicode.com/todos',{
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({
+                completed: false,
+                id: 1,
+                title: text,
+                userId: 1
+            })
+        });
+
+        if(!response.ok) {
+            throw new Error('Server error');
+        }
+        const data = await response.json();
+        dispatch(add(data));
+
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+        
+    }
+);
+
 const todoSlice = createSlice ({ // create store
     name: 'todos',                // name store   
     initialState: {
@@ -27,13 +57,13 @@ const todoSlice = createSlice ({ // create store
 
     reducers: {                 // методы изменения state
         // каждый метод принимает текущий state и action obj
-        add(state, actions) {   
+        add(state, action) {   
+            state.list.push(action.payload);
+        },
+        toggleComplete(state, action) {   
 
         },
-        toggleComplete(state, actions) {   
-
-        },
-        remove(state, actions) {   //   action.payload = принимаем данные
+        remove(state, action) {   //   action.payload = принимаем данные
 
         },
         //   action:{
